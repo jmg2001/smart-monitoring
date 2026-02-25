@@ -14,6 +14,8 @@ export default function MachineDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const n_hours = 2;
+
   const [daily, setDaily] = useState<MachineDailyData | null>(null);
   const [realtime, setRealtime] = useState<MachineRealtimeData | null>(null);
   const [chartData, setChartData] = useState<MachineSeriesData[]>([]);
@@ -25,7 +27,9 @@ export default function MachineDetail() {
     const fetchData = async () => {
       const dailyRes = await api.get(`/machines/${id}/daily`);
       const realtimeRes = await api.get(`/machines/${id}/realtime`);
-      const chartRes = await api.get(`/machines/${id}/last-hours?hours=2`);
+      const chartRes = await api.get(
+        `/machines/${id}/last-hours?hours=${n_hours}`,
+      );
       const machineRes = await api.get(`/machines/${id}`);
 
       setMachine(machineRes.data);
@@ -43,17 +47,27 @@ export default function MachineDetail() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="flex items-center gap-3 mb-6">
-        <button
-          onClick={() => navigate("/machines/")}
-          className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
-        >
-          ← Volver
-        </button>
+      <div className="justify-between flex">
+        <div className="flex items-center gap-3 mb-6">
+          <button
+            onClick={() => navigate("/machines/")}
+            className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
+          >
+            ← Volver
+          </button>
 
-        <h2 className="text-2xl font-semibold">
-          Detalle Máquina - {machine ? machine.name : "Cargando..."}
-        </h2>
+          <h2 className="text-2xl font-semibold">
+            Detalle Máquina - {machine ? machine.name : "Cargando..."}
+          </h2>
+        </div>
+        <div>
+          <button
+            onClick={() => console.log("refresh")}
+            className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
+          >
+            Refrescar
+          </button>
+        </div>
       </div>
 
       {realtime && (
@@ -119,7 +133,7 @@ export default function MachineDetail() {
 
       {chartData && (
         <div className="rounded shadow">
-          <ProductionChart data={chartData} />
+          <ProductionChart data={chartData} hours={n_hours} />
         </div>
       )}
     </div>
