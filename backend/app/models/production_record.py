@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
+from sqlalchemy import Column, DateTime, Integer, String, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 from app.db.base import Base
@@ -14,3 +14,5 @@ class ProductionRecord(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
     count_value = Column(Integer)
     status = Column(String)
+
+    __table_args__ = (Index("idx_machine_timestamp", "machine_id", "timestamp"),)

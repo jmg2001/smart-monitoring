@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.schemas.machine import MachineCreate
 from app.models.machine import Machine
 from app.api.deps import get_db
+from uuid import UUID
 
 router = APIRouter()
 
@@ -25,3 +26,16 @@ def create_machine(data: MachineCreate, db: Session = Depends(get_db)):
     db.refresh(machine)
 
     return {"machine_id": machine.id, "api_key": machine.api_key}
+
+@router.get("/companies/{company_id}/machines")
+def get_company_machines(
+    company_id: UUID,
+    db: Session = Depends(get_db)
+):
+    machines = (
+        db.query(Machine)
+        .filter(Machine.company_id == company_id)
+        .all()
+    )
+
+    return machines
