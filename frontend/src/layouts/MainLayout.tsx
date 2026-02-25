@@ -1,12 +1,10 @@
-import type { ReactNode } from "react";
+
 import LiveClock from "../components/LiveClock";
 import { NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-interface Props {
-  children: ReactNode;
-}
 
-export default function MainLayout({ children }: Props) {
+export default function MainLayout() {
   return (
     <div className="flex h-screen bg-[#0f172a] text-gray-200">
       {/* Sidebar */}
@@ -50,7 +48,7 @@ export default function MainLayout({ children }: Props) {
           {/* <SystemStatus /> */}
         </header>
 
-        <main className="flex-1 p-8 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-8 overflow-y-auto"><Outlet /></main>
       </div>
     </div>
   );

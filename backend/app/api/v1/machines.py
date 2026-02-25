@@ -29,6 +29,7 @@ def create_machine(data: MachineCreate, db: Session = Depends(get_db)):
 
     return {"machine_id": machine.id, "api_key": machine.api_key}
 
+
 # @router.get("/companies/{company_id}/machines")
 # def get_company_machines(
 #     company_id: UUID,
@@ -42,32 +43,20 @@ def create_machine(data: MachineCreate, db: Session = Depends(get_db)):
 
 #     return machines
 
+
 @router.get("/machines/{machine_id}")
-def get_machine(
-    machine_id: UUID,
-    db: Session = Depends(get_db)
-):
-    machine = (
-        db.query(Machine)
-        .filter(Machine.id == machine_id)
-        .first()
-    )
+def get_machine(machine_id: UUID, db: Session = Depends(get_db)):
+    machine = db.query(Machine).filter(Machine.id == machine_id).first()
 
     if not machine:
         return {"error": "Machine not found"}
 
     return machine
 
+
 @router.get("/companies/{company_id}/machines/overview")
-def company_overview(
-    company_id: UUID,
-    db: Session = Depends(get_db)
-):
-    machines = (
-        db.query(Machine)
-        .filter(Machine.company_id == company_id)
-        .all()
-    )
+def company_overview(company_id: UUID, db: Session = Depends(get_db)):
+    machines = db.query(Machine).filter(Machine.company_id == curre).all()
 
     overview = []
 
@@ -82,13 +71,15 @@ def company_overview(
         )
 
         if not last_record:
-            overview.append({
-                "id": machine.id,
-                "name": machine.name,
-                "status": "NO_DATA",
-                "total_production": 0,
-                "last_update_seconds": None
-            })
+            overview.append(
+                {
+                    "id": machine.id,
+                    "name": machine.name,
+                    "status": "NO_DATA",
+                    "total_production": 0,
+                    "last_update_seconds": None,
+                }
+            )
             continue
 
         # Producción hoy (simple versión)
@@ -99,7 +90,7 @@ def company_overview(
             db.query(ProductionRecord)
             .filter(
                 ProductionRecord.machine_id == machine.id,
-                ProductionRecord.timestamp >= start
+                ProductionRecord.timestamp >= start,
             )
             .order_by(ProductionRecord.timestamp)
             .all()
@@ -115,21 +106,18 @@ def company_overview(
                 total_production += r.count_value
             previous = r.count_value
 
-        seconds_since_last = (
-            (now - last_record.timestamp).total_seconds()
-        )
+        seconds_since_last = (now - last_record.timestamp).total_seconds()
 
-        computed_status = (
-            "OFFLINE" if seconds_since_last > 30
-            else last_record.status
-        )
+        computed_status = "OFFLINE" if seconds_since_last > 30 else last_record.status
 
-        overview.append({
-            "id": machine.id,
-            "name": machine.name,
-            "status": computed_status,
-            "total_production": total_production,
-            "last_update_seconds": int(seconds_since_last)
-        })
+        overview.append(
+            {
+                "id": machine.id,
+                "name": machine.name,
+                "status": computed_status,
+                "total_production": total_production,
+                "last_update_seconds": int(seconds_since_last),
+            }
+        )
 
     return overview
