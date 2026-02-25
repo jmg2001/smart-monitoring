@@ -13,4 +13,5 @@ class Machine(Base):
     name = Column(String, nullable=False)
     description = Column(String)
     ideal_cycle_time = Column(Float)
+    api_key = Column(String, unique=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
