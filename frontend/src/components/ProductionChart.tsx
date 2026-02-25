@@ -18,7 +18,15 @@ export default function ProductionChart({ data }: Props) {
       <h3 className="text-lg font-semibold mb-2">Producción últimas horas</h3>
 
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
+        <LineChart
+          data={data}
+          margin={{
+            top: 10,
+            right: 20,
+            left: 0,
+            bottom: 30,
+          }}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis
             dataKey="timestamp"
@@ -28,6 +36,17 @@ export default function ProductionChart({ data }: Props) {
           <YAxis stroke="#9ca3af" />
           <Tooltip
             labelFormatter={(value) => new Date(value).toLocaleString()}
+            contentStyle={{
+              backgroundColor: "#1e293b",
+              border: "1px solid #374151",
+              borderRadius: "8px",
+            }}
+            labelStyle={{
+              color: "#9ca3af",
+            }}
+            itemStyle={{
+              color: "#22d3ee",
+            }}
           />
           <Line
             type="monotone"

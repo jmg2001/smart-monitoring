@@ -2,19 +2,22 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
 import ProductionChart from "../components/ProductionChart";
+import KPI from "../components/KPI";
+import type {
+  MachineBase,
+  MachineDailyData,
+  MachineRealtimeData,
+  MachineSeriesData,
+} from "../types";
 
-interface Props {
-  machine_name: string;
-}
-
-export default function MachineDetail({ machine_name }: Props) {
+export default function MachineDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [daily, setDaily] = useState<any>(null);
-  const [realtime, setRealtime] = useState<any>(null);
-  const [chartData, setChartData] = useState<any[]>([]);
-  const [machine, setMachine] = useState<any>(null);
+  const [daily, setDaily] = useState<MachineDailyData | null>(null);
+  const [realtime, setRealtime] = useState<MachineRealtimeData | null>(null);
+  const [chartData, setChartData] = useState<MachineSeriesData[]>([]);
+  const [machine, setMachine] = useState<MachineBase | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -39,11 +42,11 @@ export default function MachineDetail({ machine_name }: Props) {
   }, [id]);
 
   return (
-    <div>
-      <div className="flex content-center gap-3 mb-2">
+    <div className="flex-1 flex flex-col">
+      <div className="flex items-center gap-3 mb-6">
         <button
-          onClick={() => navigate("/")}
-          className="cursor-pointer p-2 items-center rounded-xl border border-gray-700 bg-[#1e293b] hover:bg-[#273549] transition"
+          onClick={() => navigate("/machines/")}
+          className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
         >
           ← Volver
         </button>
@@ -83,10 +86,10 @@ export default function MachineDetail({ machine_name }: Props) {
           </div>
 
           <div className="flex gap-10">
-            <p className="mt-4 text-gray-400 text-sm">
+            <p className="mt-4 text-gray-400 text-sm font-mono tabular-nums">
               Último conteo: {realtime.last_count}
             </p>
-            <p className="mt-4 text-gray-400 text-sm">
+            <p className="mt-4 text-gray-400 text-sm font-mono tabular-nums">
               Última actualización: {realtime.seconds_since_last_update} s
             </p>
           </div>
@@ -94,28 +97,28 @@ export default function MachineDetail({ machine_name }: Props) {
       )}
 
       {daily && (
-        <div className="bg-[#1e293b] rounded-xl p-6 border border-gray-700 mb-6">
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <p className="text-gray-400 text-sm">Producción Hoy</p>
-              <p className="text-4xl font-bold text-cyan-400">
-                {daily.total_production}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-gray-400 text-sm">Promedio / Hora</p>
-              <p className="text-3xl font-semibold text-indigo-400">
-                {daily.avg_per_hour}
-              </p>
-            </div>
-          </div>
+        <div className="grid grid-cols-4 gap-6 mb-6">
+          <KPI
+            title="Producción Hoy"
+            value={daily.total_production}
+            color="cyan"
+          />
+          <KPI
+            title="Disponibilidad %"
+            value={daily.availability_percent}
+            color="green"
+          />
+          <KPI
+            title="RUN (min)"
+            value={daily.run_time_minutes}
+            color="emerald"
+          />
+          <KPI title="STOP (min)" value={daily.stop_time_minutes} color="red" />
         </div>
       )}
 
       {chartData && (
-        // <div className="mt-4 bg-white p-4 rounded shadow">
-        <div className="mt-4 rounded shadow mb-6">
+        <div className="rounded shadow">
           <ProductionChart data={chartData} />
         </div>
       )}

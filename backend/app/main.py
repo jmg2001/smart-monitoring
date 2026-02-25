@@ -29,7 +29,7 @@ app.include_router(companies.router, prefix="/api/v1")
 Base.metadata.create_all(bind=engine)
 
 origins = [
-    "http://localhost:5173",
+    "*"
 ]
 
 app.add_middleware(

@@ -136,10 +136,11 @@ def machine_summary(
         "records_analyzed": len(records),
     }
 
-
 @router.get("/machines/{machine_id}/daily")
-def machine_daily_summary(machine_id: UUID, db: Session = Depends(get_db)):
-    # Inicio del día en UTC
+def machine_daily_summary(
+    machine_id: UUID,
+    db: Session = Depends(get_db)
+):
     now = datetime.utcnow()
     start = datetime(now.year, now.month, now.day)
     end = now
@@ -149,7 +150,7 @@ def machine_daily_summary(machine_id: UUID, db: Session = Depends(get_db)):
         .filter(
             ProductionRecord.machine_id == machine_id,
             ProductionRecord.timestamp >= start,
-            ProductionRecord.timestamp <= end,
+            ProductionRecord.timestamp <= end
         )
         .order_by(ProductionRecord.timestamp)
         .all()
@@ -159,38 +160,56 @@ def machine_daily_summary(machine_id: UUID, db: Session = Depends(get_db)):
         return {
             "date": start.date(),
             "total_production": 0,
-            "reset_events": 0,
-            "avg_per_hour": 0,
-            "last_status": None,
-            "last_timestamp": None,
+            "run_time_minutes": 0,
+            "stop_time_minutes": 0,
+            "availability_percent": 0
         }
 
-    total = 0
+    total_production = 0
+    run_seconds = 0
+    stop_seconds = 0
     resets = 0
-    previous = records[0].count_value
 
-    for record in records[1:]:
-        current = record.count_value
+    previous = records[0]
 
-        if current >= previous:
-            total += current - previous
+    for current in records[1:]:
+
+        # ---- Producción (con reset)
+        if current.count_value >= previous.count_value:
+            total_production += (
+                current.count_value - previous.count_value
+            )
         else:
-            total += current
+            total_production += current.count_value
             resets += 1
+
+        # ---- Tiempo por estado
+        delta_seconds = (
+            current.timestamp - previous.timestamp
+        ).total_seconds()
+
+        if previous.status == "RUN":
+            run_seconds += delta_seconds
+        elif previous.status == "STOP":
+            stop_seconds += delta_seconds
 
         previous = current
 
-    total_seconds = (records[-1].timestamp - records[0].timestamp).total_seconds()
-    hours = total_seconds / 3600 if total_seconds > 0 else 1
-    avg_per_hour = total / hours
+    total_seconds = run_seconds + stop_seconds
+
+    availability = (
+        (run_seconds / total_seconds) * 100
+        if total_seconds > 0
+        else 0
+    )
 
     return {
         "date": start.date(),
-        "total_production": total,
-        "reset_events": resets,
-        "avg_per_hour": round(avg_per_hour, 2),
-        "last_status": records[-1].status,
-        "last_timestamp": records[-1].timestamp,
+        "total_production": total_production,
+        "run_time_minutes": round(run_seconds / 60, 2),
+        "stop_time_minutes": round(stop_seconds / 60, 2),
+        "availability_percent": round(availability, 2),
+        "reset_events": resets
     }
 
 
