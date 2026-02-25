@@ -1,92 +1,34 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
-import ProductionChart from "../components/ProductionChart";
+import MachineSelector from "../components/MachineSelector";
 
 export default function Dashboard() {
-  const [data, setData] = useState<any>(null);
-  const [realtime, setRealtime] = useState<any>(null);
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [machines, setMachines] = useState<any[]>([]);
+  const [selectedMachine, setSelectedMachine] = useState<any>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMachines = async () => {
       const response = await api.get(
-        "/machines/dcb03447-0955-47a4-a9b3-c01f90f3038b/daily",
+        "/companies/698622f2-528f-4039-bb3c-4ddde69e0f88/machines",
       );
-      setData(response.data);
+      setMachines(response.data);
+
+      if (response.data.length > 0) {
+        setSelectedMachine(response.data[0]);
+      }
     };
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchRealtime = async () => {
-      const response = await api.get(
-        "/machines/dcb03447-0955-47a4-a9b3-c01f90f3038b/realtime",
-      );
-      setRealtime(response.data);
-    };
-
-    fetchRealtime();
-
-    const interval = setInterval(fetchRealtime, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const fetchChart = async () => {
-      const response = await api.get(
-        "/machines/dcb03447-0955-47a4-a9b3-c01f90f3038b/last-hours?hours=2",
-      );
-      setChartData(response.data);
-    };
-
-    fetchChart();
-
-    const interval = setInterval(fetchChart, 5000);
-
-    return () => clearInterval(interval);
+    fetchMachines();
   }, []);
 
   return (
     <div className="text-black">
       <h2 className="text-2xl font-semibold mb-4">Dashboard</h2>
-
-      {data && (
-        <div className="bg-white p-4 rounded shadow">
-          <p>Total producción hoy: {data.total_production}</p>
-          <p>Promedio por hora: {data.avg_per_hour}</p>
-          <p>Último estado: {data.last_status}</p>
-        </div>
-      )}
-
-      {realtime && (
-        <div className="mt-4 bg-white p-4 rounded shadow">
-          <p>
-            Estado actual:
-            <span
-              className={`ml-2 font-bold ${
-                realtime.status === "RUN"
-                  ? "text-green-600"
-                  : realtime.status === "STOP"
-                    ? "text-red-600"
-                    : "text-gray-500"
-              }`}
-            >
-              {realtime.status}
-            </span>
-          </p>
-
-          <p>Último conteo: {realtime.last_count}</p>
-          <p>Última actualización: {realtime.seconds_since_last_update}s</p>
-        </div>
-      )}
-
-      {chartData && (
-        <div className="mt-4 bg-white p-4 rounded shadow">
-          <ProductionChart data={chartData} />
-        </div>
-      )}
+      <MachineSelector
+        machines={machines}
+        selectedMachine={selectedMachine}
+        onSelect={(machine) => setSelectedMachine(machine)}
+      />
     </div>
   );
 }

@@ -39,3 +39,19 @@ def get_company_machines(
     )
 
     return machines
+
+@router.get("/machines/{machine_id}")
+def get_machine(
+    machine_id: UUID,
+    db: Session = Depends(get_db)
+):
+    machine = (
+        db.query(Machine)
+        .filter(Machine.id == machine_id)
+        .first()
+    )
+
+    if not machine:
+        return {"error": "Machine not found"}
+
+    return machine
