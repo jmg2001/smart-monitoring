@@ -36,7 +36,7 @@ export default function AdminLayout() {
               }`
             }
           >
-            Companies
+            Empresas
           </NavLink>
 
           <div>

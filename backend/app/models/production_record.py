@@ -9,7 +9,9 @@ class ProductionRecord(Base):
     __tablename__ = "production_records"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    machine_id = Column(UUID(as_uuid=True), ForeignKey("machines.id"))
+    machine_id = Column(
+        UUID(as_uuid=True), ForeignKey("machines.id", ondelete="CASCADE")
+    )
     company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"))
     timestamp = Column(DateTime, default=datetime.utcnow)
     count_value = Column(Integer)

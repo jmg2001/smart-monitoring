@@ -7,6 +7,7 @@ from app.api.v1 import production, machines, auth
 
 from app.api.v1.admin import companies as admin_companies
 from app.api.v1.admin import machines as admin_machines
+from app.api.v1.admin import users as admin_users
 
 # from backend.app.api.v1.admin import companies
 
@@ -35,6 +36,7 @@ app.include_router(auth.router, prefix="/api/v1")
 # Admin routes
 app.include_router(admin_companies.router, prefix="/api/v1")
 app.include_router(admin_machines.router, prefix="/api/v1")
+app.include_router(admin_users.router, prefix="/api/v1")
 
 # SOLO PARA DESARROLLO (después usamos Alembic)
 Base.metadata.create_all(bind=engine)

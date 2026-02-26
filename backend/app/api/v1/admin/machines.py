@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from uuid import UUID
 import secrets
@@ -39,3 +39,21 @@ def create_machine(
     db.refresh(machine)
 
     return machine
+
+
+@router.delete("/{machine_id}")
+def delete_machine(
+    machine_id: UUID,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_super_admin),
+):
+
+    machine = db.query(Machine).filter(Machine.id == machine_id).first()
+
+    if not machine:
+        raise HTTPException(status_code=404, detail="Machine not found")
+
+    db.delete(machine)
+    db.commit()
+
+    return {"message": "Machine deleted successfully"}

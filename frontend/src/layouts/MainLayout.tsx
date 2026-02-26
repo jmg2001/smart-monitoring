@@ -1,10 +1,12 @@
-
+import { useContext } from "react";
 import LiveClock from "../components/LiveClock";
 import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-
+import { AuthContext } from "../context/auth/AuthContext";
 
 export default function MainLayout() {
+  const { logout } = useContext(AuthContext);
+
   return (
     <div className="flex h-screen bg-[#0f172a] text-gray-200">
       {/* Sidebar */}
@@ -37,6 +39,15 @@ export default function MainLayout() {
           >
             Machines
           </NavLink>
+
+          <div>
+            <button
+              onClick={logout}
+              className="text-cyan-400 hover:text-cyan-300 mt-6"
+            >
+              Logout
+            </button>
+          </div>
         </nav>
       </aside>
 
@@ -48,7 +59,9 @@ export default function MainLayout() {
           {/* <SystemStatus /> */}
         </header>
 
-        <main className="flex-1 p-8 overflow-y-auto"><Outlet /></main>
+        <main className="flex-1 p-8 overflow-y-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

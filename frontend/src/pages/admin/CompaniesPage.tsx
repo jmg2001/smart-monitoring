@@ -28,14 +28,14 @@ export default function CompaniesPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-red-400 mb-6">Companies</h1>
+      <h1 className="text-3xl font-bold text-red-400 mb-6">Empresas</h1>
 
       {/* Crear compañía */}
       <div className="bg-[#1e293b] border border-gray-700 rounded-xl p-6 mb-6">
         <div className="flex gap-4">
           <input
             type="text"
-            placeholder="Company name"
+            placeholder="Nombre de la empresa"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="flex-1 p-3 bg-[#111827] border border-gray-600 rounded text-gray-200"
@@ -52,12 +52,12 @@ export default function CompaniesPage() {
       {/* Lista */}
       <div className="bg-[#1e293b] border border-gray-700 rounded-xl p-6">
         {companies.length === 0 ? (
-          <p className="text-gray-400">No companies found.</p>
+          <p className="text-gray-400">No se encontraron empresas.</p>
         ) : (
           <table className="w-full text-sm">
             <thead className="text-gray-400 border-b border-gray-700">
               <tr>
-                <th className="text-left py-3">Name</th>
+                <th className="text-left pl-3">Empresa</th>
                 <th className="text-left py-3">ID</th>
               </tr>
             </thead>
@@ -66,9 +66,13 @@ export default function CompaniesPage() {
                 <tr
                   key={company.id}
                   className="border-b border-gray-800 hover:bg-[#111827] cursor-pointer"
-                  onClick={() => navigate(`/admin/companies/${company.id}`)}
+                  onClick={() =>
+                    navigate(`/admin/companies/${company.id}`, {
+                      state: { companyName: company.name },
+                    })
+                  }
                 >
-                  <td className="py-3">{company.name}</td>
+                  <td className="py-3 pl-2">{company.name}</td>
                   <td className="py-3 font-mono text-xs text-gray-500">
                     {company.id}
                   </td>

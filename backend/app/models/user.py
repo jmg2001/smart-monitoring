@@ -14,7 +14,7 @@ class User(Base):
 
     company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
 
-    role = Column(String, default="admin")  # super_admin | admin | operator
+    role = Column(String, default="operator")  # super_admin | admin | operator
     is_active = Column(Boolean, default=True)
 
     company = relationship("Company")
