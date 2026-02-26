@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
 import ProductionChart from "../../components/ProductionChart";
@@ -14,6 +14,9 @@ export default function AdminMachineDetail() {
   const { companyId, machineId } = useParams();
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const companyName = location.state?.companyName;
 
   const n_hours = 2;
 
@@ -22,24 +25,24 @@ export default function AdminMachineDetail() {
   const [chartData, setChartData] = useState<MachineSeriesData[]>([]);
   const [machine, setMachine] = useState<MachineBase | null>(null);
 
+  const fetchData = async () => {
+    const dailyRes = await api.get(`/machines/${machineId}/daily`);
+    const realtimeRes = await api.get(`/machines/${machineId}/realtime`);
+    const chartRes = await api.get(
+      `/machines/${machineId}/last-hours?hours=${n_hours}`,
+    );
+    const machineRes = await api.get(`/machines/${machineId}`);
+
+    console.log(machineRes);
+
+    setMachine(machineRes.data);
+    setDaily(dailyRes.data);
+    setRealtime(realtimeRes.data);
+    setChartData(chartRes.data);
+  };
+
   useEffect(() => {
     if (!machineId) return;
-
-    const fetchData = async () => {
-      const dailyRes = await api.get(`/machines/${machineId}/daily`);
-      const realtimeRes = await api.get(`/machines/${machineId}/realtime`);
-      const chartRes = await api.get(
-        `/machines/${machineId}/last-hours?hours=${n_hours}`,
-      );
-      const machineRes = await api.get(`/machines/${machineId}`);
-
-      console.log(machineRes);
-
-      setMachine(machineRes.data);
-      setDaily(dailyRes.data);
-      setRealtime(realtimeRes.data);
-      setChartData(chartRes.data);
-    };
 
     fetchData();
 
@@ -52,23 +55,31 @@ export default function AdminMachineDetail() {
     <div className="flex-1 flex flex-col">
       <div className="justify-between flex">
         <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={() => navigate(`/admin/companies/${companyId}`)}
-            className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
-          >
-            ← Volver
-          </button>
-
           <h2 className="text-2xl font-semibold">
             Detalle Máquina - {machine ? machine.name : "Cargando..."}
           </h2>
         </div>
-        <div>
+        <div className=" ">
           <button
-            onClick={() => console.log("refresh")}
-            className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
+            onClick={() => fetchData()}
+            className="cursor-pointer p-2 mr-3 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
           >
             Refrescar
+          </button>
+          <button
+            onClick={() =>
+              navigate(`/admin/companies/${companyId}`, {
+                state: { companyName: companyName },
+              })
+            }
+            className="cursor-pointer p-2 bg-red-600 hover:bg-red-500
+          text-white font-semibold
+          rounded-lg
+          shadow-lg
+          transition-all duration-300
+          hover:cursor-pointer"
+          >
+            ← Volver
           </button>
         </div>
       </div>

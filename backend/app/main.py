@@ -8,6 +8,11 @@ from app.api.v1 import production, machines, auth
 from app.api.v1.admin import companies as admin_companies
 from app.api.v1.admin import machines as admin_machines
 from app.api.v1.admin import users as admin_users
+from app.api.v1.admin import overview as admin_overview
+
+from app.core.metrics import register_request
+from fastapi import Request
+
 
 # from backend.app.api.v1.admin import companies
 
@@ -37,6 +42,7 @@ app.include_router(auth.router, prefix="/api/v1")
 app.include_router(admin_companies.router, prefix="/api/v1")
 app.include_router(admin_machines.router, prefix="/api/v1")
 app.include_router(admin_users.router, prefix="/api/v1")
+app.include_router(admin_overview.router, prefix="/api/v1")
 
 # SOLO PARA DESARROLLO (después usamos Alembic)
 Base.metadata.create_all(bind=engine)
@@ -50,6 +56,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def count_requests(request: Request, call_next):
+    register_request()
+    response = await call_next(request)
+    return response
 
 
 @app.get("/")

@@ -21,24 +21,24 @@ export default function MachineDetail() {
   const [chartData, setChartData] = useState<MachineSeriesData[]>([]);
   const [machine, setMachine] = useState<MachineBase | null>(null);
 
+  const fetchData = async () => {
+    const dailyRes = await api.get(`/machines/${id}/daily`);
+    const realtimeRes = await api.get(`/machines/${id}/realtime`);
+    const chartRes = await api.get(
+      `/machines/${id}/last-hours?hours=${n_hours}`,
+    );
+    const machineRes = await api.get(`/machines/${id}`);
+
+    console.log(machineRes);
+
+    setMachine(machineRes.data);
+    setDaily(dailyRes.data);
+    setRealtime(realtimeRes.data);
+    setChartData(chartRes.data);
+  };
+
   useEffect(() => {
     if (!id) return;
-
-    const fetchData = async () => {
-      const dailyRes = await api.get(`/machines/${id}/daily`);
-      const realtimeRes = await api.get(`/machines/${id}/realtime`);
-      const chartRes = await api.get(
-        `/machines/${id}/last-hours?hours=${n_hours}`,
-      );
-      const machineRes = await api.get(`/machines/${id}`);
-
-      console.log(machineRes);
-
-      setMachine(machineRes.data);
-      setDaily(dailyRes.data);
-      setRealtime(realtimeRes.data);
-      setChartData(chartRes.data);
-    };
 
     fetchData();
 
@@ -64,7 +64,7 @@ export default function MachineDetail() {
         </div>
         <div>
           <button
-            onClick={() => console.log("refresh")}
+            onClick={() => fetchData()}
             className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
           >
             Refrescar

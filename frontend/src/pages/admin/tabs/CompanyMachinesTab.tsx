@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 
-export default function CompanyMachinesPage({ companyId }: any) {
+export default function CompanyMachinesPage({ companyId, companyName }: any) {
   const navigate = useNavigate();
 
   const [machines, setMachines] = useState<any[]>([]);
@@ -116,7 +116,11 @@ export default function CompanyMachinesPage({ companyId }: any) {
                         Delete
                       </button>
                       <button
-                        onClick={() => navigate(`machine/${machine.id}`)}
+                        onClick={() =>
+                          navigate(`machine/${machine.id}`, {
+                            state: { companyName: companyName },
+                          })
+                        }
                         className="px-3 h-9
                                   bg-cyan-600 hover:bg-cyan-500
                                   text-white font-semibold

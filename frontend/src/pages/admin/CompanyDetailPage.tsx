@@ -6,9 +6,9 @@ import CompanyMachinesTab from "./tabs/CompanyMachinesTab";
 
 export default function CompanyDetailPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { companyId } = useParams();
-  const location = useLocation();
   const [activeTab, setActiveTab] = useState<"machines" | "users">("machines");
 
   const companyName = location.state?.companyName;
@@ -16,22 +16,26 @@ export default function CompanyDetailPage() {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className="text-3xl font-bold text-red-400 mb-6">
-          Detalle de empresa - [{companyName}]
-        </h1>
+        <div>
+          <h1 className="text-3xl font-bold text-red-400 mb-6">
+            Detalle de empresa - [{companyName}]
+          </h1>
+        </div>
 
-        <button
-          className="px-3 h-12 
-          bg-red-600 hover:bg-red-500
-          text-white font-semibold
-          rounded-lg
-          shadow-lg
-          transition-all duration-300
-          hover:cursor-pointer"
-          onClick={() => navigate("/admin/companies")}
-        >
-          Volver
-        </button>
+        <div>
+          <button
+            className="p-2 h-10 
+            bg-red-600 hover:bg-red-500
+            text-white font-semibold
+            rounded-lg
+            shadow-lg
+            transition-all duration-300
+            hover:cursor-pointer"
+            onClick={() => navigate("/admin/companies")}
+          >
+            ← Volver
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -61,7 +65,7 @@ export default function CompanyDetailPage() {
 
       {/* Content */}
       {activeTab === "machines" && (
-        <CompanyMachinesTab companyId={companyId!} />
+        <CompanyMachinesTab companyId={companyId!} companyName={companyName!} />
       )}
 
       {activeTab === "users" && <CompanyUsersTab companyId={companyId!} />}

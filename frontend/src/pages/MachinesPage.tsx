@@ -5,19 +5,12 @@ import type { MachineOverview } from "../types";
 
 export default function Dashboard() {
   const [machines, setMachines] = useState<MachineOverview[]>([]);
-  // const [selectedMachine, setSelectedMachine] =
-  //   useState<MachineOverview | null>(null);
 
   useEffect(() => {
     const fetchMachines = async () => {
-      const response = await api.get(
-        "/companies/698622f2-528f-4039-bb3c-4ddde69e0f88/machines/overview",
-      );
+      const response = await api.get("/machines/overview");
+      console.log(response);
       setMachines(response.data);
-
-      // if (response.data.length > 0) {
-      //   setSelectedMachine(response.data[0]);
-      // }
     };
 
     fetchMachines();
