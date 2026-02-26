@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/axios";
 import { useEffect } from "react";
+import { AuthContext } from "../context/auth/AuthContext";
 
 export default function Login() {
+  const { login, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) navigate("/");
-  }, []);
+    if (user) {
+      if (user.role === "super_admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    }
+  }, [user]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,9 +32,7 @@ export default function Login() {
         password,
       });
 
-      console.log(response)
-
-      localStorage.setItem("token", response.data.access_token);
+      login(response.data.access_token);
 
       navigate("/");
     } catch (err: any) {

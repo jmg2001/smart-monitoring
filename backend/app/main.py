@@ -1,8 +1,14 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.db.session import engine
 from app.db.base import Base
-from app.api.v1 import production, machines, companies, auth
-from fastapi.middleware.cors import CORSMiddleware
+from app.api.v1 import production, machines, auth
+
+from app.api.v1.admin import companies as admin_companies
+from app.api.v1.admin import machines as admin_machines
+
+# from backend.app.api.v1.admin import companies
 
 app = FastAPI(
     title="Production Monitoring API",
@@ -23,8 +29,12 @@ Autenticación:
 
 app.include_router(production.router, prefix="/api/v1")
 app.include_router(machines.router, prefix="/api/v1")
-app.include_router(companies.router, prefix="/api/v1")
 app.include_router(auth.router, prefix="/api/v1")
+
+
+# Admin routes
+app.include_router(admin_companies.router, prefix="/api/v1")
+app.include_router(admin_machines.router, prefix="/api/v1")
 
 # SOLO PARA DESARROLLO (después usamos Alembic)
 Base.metadata.create_all(bind=engine)

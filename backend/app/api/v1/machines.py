@@ -3,8 +3,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.schemas.machine import MachineCreate
 from app.models.machine import Machine
+from app.models.user import User
 from app.models.production_record import ProductionRecord
-from app.api.deps import get_db
+from app.api.deps import get_db, get_current_user
 from uuid import UUID
 from datetime import datetime
 
@@ -12,7 +13,14 @@ router = APIRouter()
 
 
 @router.post("/machines")
-def create_machine(data: MachineCreate, db: Session = Depends(get_db)):
+def create_machine(
+    data: MachineCreate,
+    db: Session = Depends(get_db),
+    currentUser: User = Depends(get_current_user),
+):
+    if currentUser.company_id != data.company_id:
+        return {"Error": "Invalid User Operation"}
+
     api_key = secrets.token_hex(32)
 
     machine = Machine(
@@ -30,23 +38,18 @@ def create_machine(data: MachineCreate, db: Session = Depends(get_db)):
     return {"machine_id": machine.id, "api_key": machine.api_key}
 
 
-# @router.get("/companies/{company_id}/machines")
-# def get_company_machines(
-#     company_id: UUID,
-#     db: Session = Depends(get_db)
-# ):
-#     machines = (
-#         db.query(Machine)
-#         .filter(Machine.company_id == company_id)
-#         .all()
-#     )
-
-#     return machines
-
-
 @router.get("/machines/{machine_id}")
-def get_machine(machine_id: UUID, db: Session = Depends(get_db)):
-    machine = db.query(Machine).filter(Machine.id == machine_id).first()
+def get_machine(
+    machine_id: UUID,
+    db: Session = Depends(get_db),
+    currentUser: User = Depends(get_current_user),
+):
+    machine = (
+        db.query(Machine)
+        .filter(Machine.company_id == currentUser.company_id)
+        .filter(Machine.id == machine_id)
+        .first()
+    )
 
     if not machine:
         return {"error": "Machine not found"}
@@ -55,8 +58,16 @@ def get_machine(machine_id: UUID, db: Session = Depends(get_db)):
 
 
 @router.get("/companies/{company_id}/machines/overview")
-def company_overview(company_id: UUID, db: Session = Depends(get_db)):
-    machines = db.query(Machine).filter(Machine.company_id == company_id).all()
+def company_overview(
+    company_id: UUID,
+    db: Session = Depends(get_db),
+    currentUser: User = Depends(get_current_user),
+):
+    machines = (
+        db.query(Machine).filter(Machine.company_id == currentUser.company_id)
+        # .filter(Machine.company_id == company_id)
+        .all()
+    )
 
     overview = []
 

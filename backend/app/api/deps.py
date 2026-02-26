@@ -1,11 +1,12 @@
 from fastapi import Header, HTTPException, Depends, status
 from typing import Annotated
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+
 from app.db.session import SessionLocal
 from app.models.machine import Machine
 from app.core.config import settings
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
 from app.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
@@ -59,3 +60,9 @@ def get_current_user(
         raise credentials_exception
 
     return user
+
+
+def get_super_admin(current_user=Depends(get_current_user)):
+    if current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return current_user
