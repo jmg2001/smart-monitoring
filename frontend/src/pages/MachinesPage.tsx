@@ -30,11 +30,7 @@ export default function Dashboard() {
   return (
     <div className="text-white">
       <h2 className="text-2xl font-semibold mb-4">Machines</h2>
-      <MachineSelector
-        machines={machines}
-        // selectedMachine={selectedMachine}
-        // onSelect={(machine: MachineOverview) => setSelectedMachine(machine)}
-      />
+      <MachineSelector machines={machines} />
     </div>
   );
 }

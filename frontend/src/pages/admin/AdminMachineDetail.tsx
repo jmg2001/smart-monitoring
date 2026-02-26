@@ -1,17 +1,18 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
-import ProductionChart from "../components/ProductionChart";
-import KPI from "../components/KPI";
+import { api } from "../../api/axios";
+import ProductionChart from "../../components/ProductionChart";
+import KPI from "../../components/KPI";
 import type {
   MachineBase,
   MachineDailyData,
   MachineRealtimeData,
   MachineSeriesData,
-} from "../types";
+} from "../../types";
 
-export default function MachineDetail() {
-  const { id } = useParams();
+export default function AdminMachineDetail() {
+  const { companyId, machineId } = useParams();
+
   const navigate = useNavigate();
 
   const n_hours = 2;
@@ -22,15 +23,15 @@ export default function MachineDetail() {
   const [machine, setMachine] = useState<MachineBase | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (!machineId) return;
 
     const fetchData = async () => {
-      const dailyRes = await api.get(`/machines/${id}/daily`);
-      const realtimeRes = await api.get(`/machines/${id}/realtime`);
+      const dailyRes = await api.get(`/machines/${machineId}/daily`);
+      const realtimeRes = await api.get(`/machines/${machineId}/realtime`);
       const chartRes = await api.get(
-        `/machines/${id}/last-hours?hours=${n_hours}`,
+        `/machines/${machineId}/last-hours?hours=${n_hours}`,
       );
-      const machineRes = await api.get(`/machines/${id}`);
+      const machineRes = await api.get(`/machines/${machineId}`);
 
       console.log(machineRes);
 
@@ -45,14 +46,14 @@ export default function MachineDetail() {
     const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, [id]);
+  }, [machineId]);
 
   return (
     <div className="flex-1 flex flex-col">
       <div className="justify-between flex">
         <div className="flex items-center gap-3 mb-6">
           <button
-            onClick={() => navigate("/machines/")}
+            onClick={() => navigate(`/admin/companies/${companyId}`)}
             className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
           >
             ← Volver

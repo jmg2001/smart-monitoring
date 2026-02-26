@@ -40,10 +40,10 @@ export default function MainLayout() {
             Machines
           </NavLink>
 
-          <div>
+          <div className="block  rounded-md transition">
             <button
               onClick={logout}
-              className="text-cyan-400 hover:text-cyan-300 mt-6"
+              className="bg-cyan-600 rounded-md text-white py-2 px-3 size-full hover:cursor-pointer hover:bg-cyan-500"
             >
               Logout
             </button>

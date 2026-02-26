@@ -1,10 +1,12 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import CompanyUsersTab from "./tabs/CompanyUsersTab";
 import CompanyMachinesTab from "./tabs/CompanyMachinesTab";
 
 export default function CompanyDetailPage() {
+  const navigate = useNavigate();
+
   const { companyId } = useParams();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<"machines" | "users">("machines");
@@ -13,9 +15,24 @@ export default function CompanyDetailPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-red-400 mb-6">
-        Detalle de empresa - [{companyName}]
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold text-red-400 mb-6">
+          Detalle de empresa - [{companyName}]
+        </h1>
+
+        <button
+          className="px-3 h-12 
+          bg-red-600 hover:bg-red-500
+          text-white font-semibold
+          rounded-lg
+          shadow-lg
+          transition-all duration-300
+          hover:cursor-pointer"
+          onClick={() => navigate("/admin/companies")}
+        >
+          Volver
+        </button>
+      </div>
 
       {/* Tabs */}
       <div className="flex gap-4 mb-6 border-b border-gray-700">

@@ -14,7 +14,7 @@ def create_company(
     db: Session = Depends(get_db),
     current_user=Depends(get_super_admin),
 ):
-
+    print(company_data)
     existing = db.query(Company).filter(Company.name == company_data.name).first()
 
     if existing:

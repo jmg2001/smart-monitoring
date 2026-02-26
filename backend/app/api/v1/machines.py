@@ -58,15 +58,13 @@ def get_machine(
 
 
 @router.get("/companies/{company_id}/machines/overview")
-def company_overview(
+def machines_overview(
     company_id: UUID,
     db: Session = Depends(get_db),
     currentUser: User = Depends(get_current_user),
 ):
     machines = (
-        db.query(Machine).filter(Machine.company_id == currentUser.company_id)
-        # .filter(Machine.company_id == company_id)
-        .all()
+        db.query(Machine).filter(Machine.company_id == currentUser.company_id).all()
     )
 
     overview = []

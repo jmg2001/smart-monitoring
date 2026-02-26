@@ -42,9 +42,9 @@ export default function CompaniesPage() {
           />
           <button
             onClick={handleCreate}
-            className="bg-red-600 hover:bg-red-500 px-6 rounded font-semibold"
+            className="bg-red-600 hover:bg-red-500 hover:cursor-pointer px-6 rounded font-semibold"
           >
-            Create
+            Crear
           </button>
         </div>
       </div>
@@ -59,22 +59,29 @@ export default function CompaniesPage() {
               <tr>
                 <th className="text-left pl-3">Empresa</th>
                 <th className="text-left py-3">ID</th>
+                <th className="text-left py-3">Acción</th>
               </tr>
             </thead>
             <tbody>
               {companies.map((company) => (
-                <tr
-                  key={company.id}
-                  className="border-b border-gray-800 hover:bg-[#111827] cursor-pointer"
-                  onClick={() =>
-                    navigate(`/admin/companies/${company.id}`, {
-                      state: { companyName: company.name },
-                    })
-                  }
-                >
-                  <td className="py-3 pl-2">{company.name}</td>
+                <tr key={company.id}>
+                  <td className="py-3 pl-2 border-b border-gray-800 ">
+                    {company.name}
+                  </td>
                   <td className="py-3 font-mono text-xs text-gray-500">
                     {company.id}
+                  </td>
+                  <td>
+                    <button
+                      onClick={() =>
+                        navigate(`/admin/companies/${company.id}`, {
+                          state: { companyName: company.name },
+                        })
+                      }
+                      className="cursor-pointer h-9 px-3 bg-red-600 hover:bg-red-500 rounded-md shadow-lg"
+                    >
+                      Detalles
+                    </button>
                   </td>
                 </tr>
               ))}

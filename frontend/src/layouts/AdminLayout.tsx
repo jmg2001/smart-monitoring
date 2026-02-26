@@ -39,10 +39,10 @@ export default function AdminLayout() {
             Empresas
           </NavLink>
 
-          <div>
+          <div className=" block rounded hover:bg-[#1e293b]">
             <button
               onClick={logout}
-              className="text-red-400 hover:text-red-300 mt-6"
+              className=" bg-red-600 rounded-md text-white py-2 px-3 size-full hover:cursor-pointer hover:bg-red-500"
             >
               Logout
             </button>

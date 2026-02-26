@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function CompanyMachinesPage({ companyId }: any) {
+  const navigate = useNavigate();
+
   const [machines, setMachines] = useState<any[]>([]);
   const [newMachineName, setNewMachineName] = useState("");
   const [description, setDescription] = useState("");
@@ -72,7 +75,7 @@ export default function CompanyMachinesPage({ companyId }: any) {
 
         <button
           onClick={handleCreateMachine}
-          className="mt-4 bg-red-600 hover:bg-red-500 px-6 py-2 rounded font-semibold"
+          className="mt-4 bg-red-600 hover:bg-red-500 px-6 py-2 rounded font-semibold hover:cursor-pointer"
         >
           Crear Máquina
         </button>
@@ -93,18 +96,36 @@ export default function CompanyMachinesPage({ companyId }: any) {
             </thead>
             <tbody>
               {machines.map((machine) => (
-                <tr key={machine.id} className="border-b border-gray-800 ">
+                <tr key={machine.id} className="border-b border-gray-800">
                   <td className="py-3">{machine.name}</td>
                   <td className="py-3 font-mono text-xs text-gray-500">
                     {machine.api_key}
                   </td>
                   <td>
-                    <div className="bg-red-500 w-fit p-3 rounded-lg">
+                    <div className="flex gap-2">
                       <button
                         onClick={() => handleDeleteMachine(machine.id)}
-                        className="text-white hover:text-red-400 cursor-pointer"
+                        className="px-3 h-9
+                                  bg-red-600 hover:bg-red-500
+                                  text-white font-semibold
+                                  rounded-md
+                                  shadow-lg
+                                  transition-all duration-300
+                                  hover:cursor-pointer"
                       >
                         Delete
+                      </button>
+                      <button
+                        onClick={() => navigate(`machine/${machine.id}`)}
+                        className="px-3 h-9
+                                  bg-cyan-600 hover:bg-cyan-500
+                                  text-white font-semibold
+                                  rounded-md
+                                  shadow-lg
+                                  transition-all duration-300
+                                  hover:cursor-pointer"
+                      >
+                        Detalles
                       </button>
                     </div>
                   </td>
