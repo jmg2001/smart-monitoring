@@ -66,9 +66,7 @@ export default function CompaniesPage() {
                 <tr
                   key={company.id}
                   className="border-b border-gray-800 hover:bg-[#111827] cursor-pointer"
-                  onClick={() =>
-                    navigate(`/admin/companies/${company.id}/machines`)
-                  }
+                  onClick={() => navigate(`/admin/companies/${company.id}`)}
                 >
                   <td className="py-3">{company.name}</td>
                   <td className="py-3 font-mono text-xs text-gray-500">

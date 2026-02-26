@@ -8,9 +8,10 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminHome from "./pages/admin/AdminHome";
 import CompaniesPage from "./pages/admin/CompaniesPage";
-import UsersPage from "./pages/admin/UsersPage";
-import AdminMachinesPage from "./pages/admin/AdminMachinePages";
-import CompanyMachinesPage from "./pages/admin/CompanyMachinesPage";
+// import UsersPage from "./pages/admin/UsersPage";
+// import AdminMachinesPage from "./pages/admin/AdminMachinePages";
+// import CompanyMachinesPage from "./pages/admin/CompanyMachinesPage";
+import CompanyDetailPage from "./pages/admin/CompanyDetailPage";
 
 function App() {
   return (
@@ -42,12 +43,7 @@ function App() {
       >
         <Route index element={<AdminHome />} />
         <Route path="companies" element={<CompaniesPage />} />
-        <Route
-          path="companies/:companyId/machines"
-          element={<CompanyMachinesPage />}
-        />
-        <Route path="users" element={<UsersPage />} />
-        <Route path="machines" element={<AdminMachinesPage />} />
+        <Route path="companies/:companyId" element={<CompanyDetailPage />} />
       </Route>
     </Routes>
   );

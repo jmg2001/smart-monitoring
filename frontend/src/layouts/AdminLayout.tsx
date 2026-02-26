@@ -39,32 +39,6 @@ export default function AdminLayout() {
             Companies
           </NavLink>
 
-          <NavLink
-            to="/admin/users"
-            className={({ isActive }) =>
-              `block px-3 py-2 rounded ${
-                isActive
-                  ? "bg-[#1e293b] text-red-400"
-                  : "text-gray-400 hover:bg-[#1e293b]"
-              }`
-            }
-          >
-            Users
-          </NavLink>
-
-          <NavLink
-            to="/admin/machines"
-            className={({ isActive }) =>
-              `block px-3 py-2 rounded ${
-                isActive
-                  ? "bg-[#1e293b] text-red-400"
-                  : "text-gray-400 hover:bg-[#1e293b]"
-              }`
-            }
-          >
-            Machines
-          </NavLink>
-
           <div>
             <button
               onClick={logout}
