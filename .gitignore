@@ -3,7 +3,6 @@ __pycache__
 node_modules
 # Ignorar todos los .env en cualquier carpeta
 **/.env
-**/.env.*
 
 # Logs
 logs

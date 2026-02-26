@@ -56,7 +56,7 @@ def get_machine(machine_id: UUID, db: Session = Depends(get_db)):
 
 @router.get("/companies/{company_id}/machines/overview")
 def company_overview(company_id: UUID, db: Session = Depends(get_db)):
-    machines = db.query(Machine).filter(Machine.company_id == curre).all()
+    machines = db.query(Machine).filter(Machine.company_id == company_id).all()
 
     overview = []
 

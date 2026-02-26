@@ -21,6 +21,10 @@ from app.models.company import Company
 from app.models.machine import Machine
 from app.models.production_record import ProductionRecord
 
+from app.core.config import settings
+
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
