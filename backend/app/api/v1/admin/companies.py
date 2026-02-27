@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.schemas.company import CompanyCreate
 from app.models.company import Company
 from app.api.deps import get_db, get_super_admin
+from uuid import UUID
 import uuid
 
 router = APIRouter(prefix="/admin/companies", tags=["admin"])
@@ -30,5 +31,22 @@ def create_company(
 
 @router.get("/")
 def get_companies(db: Session = Depends(get_db), current_user=Depends(get_super_admin)):
-    print(current_user.email)
     return db.query(Company).all()
+
+
+@router.delete("/{company_id}")
+def delete_company(
+    company_id: UUID,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_super_admin),
+):
+
+    company = db.query(Company).filter(Company.id == company_id).first()
+
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+
+    db.delete(company)
+    db.commit()
+
+    return {"message": "Company deleted successfully"}

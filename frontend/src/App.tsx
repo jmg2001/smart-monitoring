@@ -40,10 +40,10 @@ function App() {
         }
       >
         <Route index element={<AdminHome />} />
-        <Route path="companies" element={<CompaniesPage />} />
-        <Route path="companies/:companyId" element={<CompanyDetailPage />} />
+        <Route path="companies/" element={<CompaniesPage />} />
+        <Route path="companies/:companyId/" element={<CompanyDetailPage />} />
         <Route
-          path="companies/:companyId/machine/:machineId"
+          path="companies/:companyId/machine/:machineId/"
           element={<AdminMachineDetail />}
         />
       </Route>

@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 interface Props {
   children: React.ReactNode;
@@ -19,7 +19,12 @@ export default function PrivateRoute({ children, roles }: Props) {
     const decoded = jwtDecode<TokenPayload>(token);
 
     if (!roles.includes(decoded.role)) {
-      return <Navigate to="/" />;
+      // 🔥 AQUÍ está lo que te falta
+      return decoded.role === "super_admin" ? (
+        <Navigate to="/admin" replace />
+      ) : (
+        <Navigate to="/" replace />
+      );
     }
   }
 

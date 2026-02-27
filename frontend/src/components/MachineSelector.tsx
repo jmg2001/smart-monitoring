@@ -4,8 +4,6 @@ import type { MachineOverview } from "../types";
 
 interface Props {
   machines: MachineOverview[];
-  // onSelect: any;
-  // selectedMachine: MachineOverview | null;
 }
 
 export default function MachineSelector({ machines }: Props) {

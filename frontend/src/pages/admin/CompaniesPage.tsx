@@ -9,7 +9,7 @@ export default function CompaniesPage() {
   const [name, setName] = useState("");
 
   const fetchCompanies = async () => {
-    const response = await api.get("/admin/companies");
+    const response = await api.get("/admin/companies/");
     setCompanies(response.data);
   };
 
@@ -17,12 +17,20 @@ export default function CompaniesPage() {
     fetchCompanies();
   }, []);
 
-  const handleCreate = async () => {
+  const handleCreateCompany = async () => {
     if (!name.trim()) return;
 
-    await api.post("/admin/companies", { name });
+    await api.post("/admin/companies/", { name });
 
     setName("");
+    fetchCompanies();
+  };
+
+  const handleDeleteCompany = async (company_id: string) => {
+    if (!confirm("Are you sure you want to delete this company?")) return;
+
+    await api.delete(`/admin/companies/${company_id}`);
+
     fetchCompanies();
   };
 
@@ -41,7 +49,7 @@ export default function CompaniesPage() {
             className="flex-1 p-3 bg-[#111827] border border-gray-600 rounded text-gray-200"
           />
           <button
-            onClick={handleCreate}
+            onClick={handleCreateCompany}
             className="bg-red-600 hover:bg-red-500 hover:cursor-pointer px-6 rounded font-semibold"
           >
             Crear
@@ -72,16 +80,36 @@ export default function CompaniesPage() {
                     {company.id}
                   </td>
                   <td>
-                    <button
-                      onClick={() =>
-                        navigate(`/admin/companies/${company.id}`, {
-                          state: { companyName: company.name },
-                        })
-                      }
-                      className="cursor-pointer h-9 px-3 bg-red-600 hover:bg-red-500 rounded-md shadow-lg"
-                    >
-                      Detalles
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleDeleteCompany(company.id)}
+                        className="px-3 h-9
+                                    bg-red-600 hover:bg-red-500
+                                    text-white font-semibold
+                                    rounded-md
+                                    shadow-lg
+                                    transition-all duration-300
+                                    hover:cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigate(`/admin/companies/${company.id}`, {
+                            state: { companyName: company.name },
+                          })
+                        }
+                        className="px-3 h-9
+                                    bg-cyan-600 hover:bg-cyan-500
+                                    text-white font-semibold
+                                    rounded-md
+                                    shadow-lg
+                                    transition-all duration-300
+                                    hover:cursor-pointer"
+                      >
+                        Detalles
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

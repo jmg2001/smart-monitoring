@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "./AuthContext";
 import type { TokenPayload } from "./types";
+import { setupInterceptors } from "../../api/axios";
 
 interface Props {
   children: ReactNode;
@@ -16,12 +17,6 @@ export function AuthProvider({ children }: Props) {
     localStorage.setItem("token", token);
     const decoded = jwtDecode<TokenPayload>(token);
     setUser(decoded);
-
-    if (decoded.role === "super_admin") {
-      navigate("/admin");
-    } else {
-      navigate("/");
-    }
   };
 
   const logout = () => {
@@ -45,6 +40,10 @@ export function AuthProvider({ children }: Props) {
     } catch {
       logout();
     }
+  }, []);
+
+  useEffect(() => {
+    setupInterceptors(logout);
   }, []);
 
   return (

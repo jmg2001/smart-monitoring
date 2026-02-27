@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "../api/axios";
 import ProductionChart from "../components/ProductionChart";
 import KPI from "../components/KPI";
@@ -10,18 +10,18 @@ import type {
   MachineSeriesData,
 } from "../types";
 
+const n_hours = 2;
+
 export default function MachineDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  const n_hours = 2;
 
   const [daily, setDaily] = useState<MachineDailyData | null>(null);
   const [realtime, setRealtime] = useState<MachineRealtimeData | null>(null);
   const [chartData, setChartData] = useState<MachineSeriesData[]>([]);
   const [machine, setMachine] = useState<MachineBase | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const dailyRes = await api.get(`/machines/${id}/daily`);
     const realtimeRes = await api.get(`/machines/${id}/realtime`);
     const chartRes = await api.get(
@@ -29,13 +29,11 @@ export default function MachineDetail() {
     );
     const machineRes = await api.get(`/machines/${id}`);
 
-    console.log(machineRes);
-
     setMachine(machineRes.data);
     setDaily(dailyRes.data);
     setRealtime(realtimeRes.data);
     setChartData(chartRes.data);
-  };
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
@@ -45,7 +43,7 @@ export default function MachineDetail() {
     const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, [id]);
+  }, [fetchData, id]);
 
   return (
     <div className="flex-1 flex flex-col">

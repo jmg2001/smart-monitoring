@@ -17,9 +17,11 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 from app.db.base import Base
+
 from app.models.company import Company
 from app.models.machine import Machine
 from app.models.production_record import ProductionRecord
+from app.models.user import User
 
 from app.core.config import settings
 

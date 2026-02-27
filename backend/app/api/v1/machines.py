@@ -15,7 +15,6 @@ def machines_overview(
     db: Session = Depends(get_db),
     currentUser: User = Depends(get_current_user),
 ):
-    print(currentUser.role)
     if currentUser.role != "super_admin":
         machines = (
             db.query(Machine).filter(Machine.company_id == currentUser.company_id).all()
@@ -116,7 +115,6 @@ def machines_overview_per_company(
     db: Session = Depends(get_db),
     currentUser: User = Depends(get_current_user),
 ):
-    print(currentUser.role)
     if currentUser.role == "super_admin":
         machines = db.query(Machine).filter(Machine.company_id == company_id).all()
     else:

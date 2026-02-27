@@ -31,7 +31,7 @@ export default function CompanyDetailPage() {
             shadow-lg
             transition-all duration-300
             hover:cursor-pointer"
-            onClick={() => navigate("/admin/companies")}
+            onClick={() => navigate("/admin/companies/")}
           >
             ← Volver
           </button>

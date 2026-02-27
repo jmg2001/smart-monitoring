@@ -16,15 +16,15 @@ SEND_INTERVAL = 5  # segundos
 MACHINES = [
     {
         "name": "Máquina 1",
-        "api_key": "eeb13aa339197006b7b7adc8474bc009c1d169aa02b12d2776251701cffe2919",
+        "api_key": "36d92f6768b25d1802440092782dc4ffcd0f7602c2341bc7c08f72c105d29c0a",
     },
     {
         "name": "Máquina 2",
-        "api_key": "83aa9d679c84dce36532fb1694140ddc3460fd87a08c1f1fc370d0a2812681a6",
+        "api_key": "85c7932bf30eda8d323fc262d813a020f7e4f7712946c1ff6b68ff3dbe468dd3",
     },
     {
         "name": "Máquina 3",
-        "api_key": "d5df0e22d74091e67d3cee4a3535690559beb2e428080f9057d44a1c875ecb9a",
+        "api_key": "19d39e2a0554c8350914abc6dfb9ded2128acaceb321362abb04b934be26a799",
     },
 ]
 

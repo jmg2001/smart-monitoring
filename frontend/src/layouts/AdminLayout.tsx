@@ -23,11 +23,11 @@ export default function AdminLayout() {
               }`
             }
           >
-            Overview
+            General
           </NavLink>
 
           <NavLink
-            to="/admin/companies"
+            to="/admin/companies/"
             className={({ isActive }) =>
               `block px-3 py-2 rounded ${
                 isActive

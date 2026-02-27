@@ -12,7 +12,11 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     password_hash = Column(String, nullable=False)
 
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    company_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("companies.id", ondelete="CASCADE"),
+        nullable=True,
+    )
 
     role = Column(String, default="operator")  # super_admin | admin | operator
     is_active = Column(Boolean, default=True)

@@ -9,7 +9,9 @@ class Machine(Base):
     __tablename__ = "machines"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"))
+    company_id = Column(
+        UUID(as_uuid=True), ForeignKey("companies.id", ondelete="CASCADE")
+    )
     name = Column(String, nullable=False)
     description = Column(String)
     ideal_cycle_time = Column(Float)

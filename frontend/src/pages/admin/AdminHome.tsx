@@ -8,7 +8,6 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  LabelList,
 } from "recharts";
 
 export default function AdminHome() {
@@ -20,7 +19,7 @@ export default function AdminHome() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      const response = await api.get("/admin/overview");
+      const response = await api.get("/admin/overview/");
 
       setStats(response.data);
 
@@ -48,7 +47,7 @@ export default function AdminHome() {
   return (
     <div>
       <h1 className="text-3xl font-bold text-red-400 text- bg- mb-8">
-        System Overview
+        Vista General
       </h1>
 
       <div className="grid grid-cols-3 gap-6">
