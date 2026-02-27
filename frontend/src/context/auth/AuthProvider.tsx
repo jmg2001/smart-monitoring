@@ -2,7 +2,7 @@ import { useState, useEffect, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "./AuthContext";
-import type { TokenPayload } from "./types";
+import type { TokenPayload } from "../../types";
 import { setupInterceptors } from "../../api/axios";
 
 interface Props {

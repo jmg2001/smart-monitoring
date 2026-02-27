@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
+import type { MachineAPI } from "../../../types";
 
-export default function CompanyMachinesPage({ companyId, companyName }: any) {
+interface Props {
+  companyId: string;
+  companyName: string;
+}
+
+export default function CompanyMachinesPage({ companyId, companyName }: Props) {
   const navigate = useNavigate();
 
-  const [machines, setMachines] = useState<any[]>([]);
+  const [machines, setMachines] = useState<MachineAPI[]>([]);
   const [newMachineName, setNewMachineName] = useState("");
   const [description, setDescription] = useState("");
   const [idealCycleTime, setIdealCycleTime] = useState("");

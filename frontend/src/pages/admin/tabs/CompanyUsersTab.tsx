@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../api/axios";
+import type { UserBase } from "../../../types";
 
-export default function CompanyUsersTab({ companyId }: any) {
-  const [users, setUsers] = useState<any[]>([]);
+interface Props {
+  companyId: string;
+}
+
+export default function CompanyUsersTab({ companyId }: Props) {
+  const [users, setUsers] = useState<UserBase[]>([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("operator");

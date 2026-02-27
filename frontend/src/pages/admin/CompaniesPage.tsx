@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import type { CompanyBase } from "../../types";
 
 export default function CompaniesPage() {
   const navigate = useNavigate();
 
-  const [companies, setCompanies] = useState<any[]>([]);
+  const [companies, setCompanies] = useState<CompanyBase[]>([]);
   const [name, setName] = useState("");
 
   const fetchCompanies = async () => {

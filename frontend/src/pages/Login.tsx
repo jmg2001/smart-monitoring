@@ -36,7 +36,8 @@ export default function Login() {
       login(response.data.access_token);
 
       navigate("/");
-    } catch (err: any) {
+    } catch (err) {
+      console.log(err);
       setError("Credenciales inválidas");
     }
   };

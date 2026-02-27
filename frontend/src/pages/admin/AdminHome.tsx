@@ -9,10 +9,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import type { ServerStatistics, ServerStatus } from "../../types";
 
 export default function AdminHome() {
-  const [stats, setStats] = useState<any>(null);
-  const [serverHistory, setServerHistory] = useState<any[]>([]);
+  const [stats, setStats] = useState<ServerStatistics | null>(null);
+  const [serverHistory, setServerHistory] = useState<ServerStatus[]>([]);
   const [currCPU, setCurrCPU] = useState<number>(0);
   const [currMemory, setCurrMemory] = useState<number>(0);
   const [currRpm, setCurrRpm] = useState<number>(0);
@@ -23,7 +24,7 @@ export default function AdminHome() {
 
       setStats(response.data);
 
-      setServerHistory((prev) => [
+      setServerHistory((prev: ServerStatus[]) => [
         ...prev.slice(-20),
         {
           time: new Date().toLocaleTimeString(),
