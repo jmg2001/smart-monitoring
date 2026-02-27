@@ -123,7 +123,7 @@ export default function CompanyUsersTab({ companyId }: Props) {
                                 transition-all duration-300
                                 hover:cursor-pointer"
                     >
-                      Delete
+                      Eliminar
                     </button>
                   </td>
                 </tr>

@@ -60,12 +60,12 @@ export default function AdminHome() {
         <KPI
           title="Máquinas"
           value={stats ? stats.total_machines : "Cargando..."}
-          color=""
+          color="cyan"
         />
         <KPI
           title="Usuarios:"
           value={stats ? stats.total_users : "Cargando..."}
-          color="emerald"
+          color="white"
         />
         <KPI
           title="Registros de Producción:"
@@ -112,7 +112,19 @@ export default function AdminHome() {
             <LineChart data={serverHistory}>
               <XAxis dataKey="time" stroke="#9CA3AF" />
               <YAxis stroke="#9CA3AF" />
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1e293b",
+                  border: "1px solid #374151",
+                  borderRadius: "8px",
+                }}
+                labelStyle={{
+                  color: "#9ca3af",
+                }}
+                itemStyle={{
+                  color: "#22d3ee",
+                }}
+              />
 
               <Line
                 type="monotone"

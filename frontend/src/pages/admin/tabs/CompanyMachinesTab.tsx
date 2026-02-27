@@ -119,7 +119,7 @@ export default function CompanyMachinesPage({ companyId, companyName }: Props) {
                                   transition-all duration-300
                                   hover:cursor-pointer"
                       >
-                        Delete
+                        Eliminar
                       </button>
                       <button
                         onClick={() =>

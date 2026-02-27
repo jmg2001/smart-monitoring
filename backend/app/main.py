@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.session import engine
 from app.db.base import Base
-from app.api.v1 import production, machines, auth
+from app.api.v1 import production, machines, auth, overview
 
 from app.api.v1.admin import companies as admin_companies
 from app.api.v1.admin import machines as admin_machines
@@ -33,9 +33,19 @@ Autenticación:
     version="1.0.0",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # o tu dominio específico
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(production.router, prefix="/api/v1")
 app.include_router(machines.router, prefix="/api/v1")
 app.include_router(auth.router, prefix="/api/v1")
+app.include_router(overview.router, prefix="/api/v1")
 
 
 # Admin routes
@@ -48,14 +58,6 @@ app.include_router(admin_overview.router, prefix="/api/v1")
 Base.metadata.create_all(bind=engine)
 
 origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 @app.middleware("http")

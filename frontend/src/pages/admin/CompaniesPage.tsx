@@ -92,7 +92,7 @@ export default function CompaniesPage() {
                                     transition-all duration-300
                                     hover:cursor-pointer"
                       >
-                        Delete
+                        Eliminar
                       </button>
                       <button
                         onClick={() =>

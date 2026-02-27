@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import Dashboard from "./pages/Dashboard";
+import Overview from "./pages/Overview";
 import MachineDetail from "./pages/MachineDetail";
 import MachinesPage from "./pages/MachinesPage";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
-import AdminHome from "./pages/admin/AdminHome";
+import AdminOverview from "./pages/admin/AdminOverview";
 import CompaniesPage from "./pages/admin/CompaniesPage";
 import CompanyDetailPage from "./pages/admin/CompanyDetailPage";
 import AdminMachineDetail from "./pages/admin/AdminMachineDetail";
@@ -25,7 +25,7 @@ function App() {
           </PrivateRoute>
         }
       >
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Overview />} />
         <Route path="/machine/:id" element={<MachineDetail />} />
         <Route path="/machines" element={<MachinesPage />} />
       </Route>
@@ -39,7 +39,7 @@ function App() {
           </PrivateRoute>
         }
       >
-        <Route index element={<AdminHome />} />
+        <Route index element={<AdminOverview />} />
         <Route path="companies/" element={<CompaniesPage />} />
         <Route path="companies/:companyId/" element={<CompanyDetailPage />} />
         <Route

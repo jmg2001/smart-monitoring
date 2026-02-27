@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { AuthContext } from "../context/auth/AuthContext";
+import LiveClock from "../components/LiveClock";
 
 export default function AdminLayout() {
   const { logout } = useContext(AuthContext);
@@ -9,7 +10,15 @@ export default function AdminLayout() {
     <div className="flex h-screen bg-[#111827] text-gray-200">
       {/* Sidebar Admin */}
       <aside className="w-64 bg-[#0f172a] border-r border-gray-800 p-6">
-        <h2 className="text-xl font-bold text-red-400 mb-8">SYSTEM ADMIN</h2>
+        <div className="flex-col mb-8 gap-2">
+          <h2 className="text-xl text-wrap text-center font-bold text-red-400 ">
+            SMART MONITOR
+          </h2>
+
+          <h2 className="text-xl text-wrap text-center font-bold text-red-400 ">
+            ADMINISTATOR
+          </h2>
+        </div>
 
         <nav className="space-y-4 text-sm">
           <NavLink
@@ -44,16 +53,24 @@ export default function AdminLayout() {
               onClick={logout}
               className=" bg-red-600 rounded-md text-white py-2 px-3 size-full hover:cursor-pointer hover:bg-red-500"
             >
-              Logout
+              Cerrar Sesión
             </button>
           </div>
         </nav>
       </aside>
 
-      {/* Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        <Outlet />
-      </main>
+      {/* Main Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Bar */}
+        <header className="h-16 bg-[#111827] border-b border-gray-800 flex items-center justify-between px-6">
+          <LiveClock />
+          {/* <SystemStatus /> */}
+        </header>
+
+        <main className="flex-1 p-8 overflow-y-auto">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

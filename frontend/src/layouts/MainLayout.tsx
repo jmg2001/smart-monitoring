@@ -11,7 +11,9 @@ export default function MainLayout() {
     <div className="flex h-screen bg-[#0f172a] text-gray-200">
       {/* Sidebar */}
       <aside className="w-32 bg-[#111827] border-r border-gray-800 p-6 md:w-64">
-        <h2 className="text-lg font-bold text-cyan-400 mb-8">SMART MONITOR</h2>
+        <h2 className="text-lg font-bold text-cyan-400 mb-8 text-center">
+          SMART MONITOR
+        </h2>
 
         <nav className="space-y-4 text-sm">
           <NavLink
@@ -24,7 +26,7 @@ export default function MainLayout() {
               }`
             }
           >
-            Dashboard
+            Vista General
           </NavLink>
 
           <NavLink
@@ -37,7 +39,7 @@ export default function MainLayout() {
               }`
             }
           >
-            Machines
+            Máquinas
           </NavLink>
 
           <div className="block  rounded-md transition">
@@ -45,7 +47,7 @@ export default function MainLayout() {
               onClick={logout}
               className="bg-cyan-600 rounded-md text-white py-2 px-3 size-full hover:cursor-pointer hover:bg-cyan-500"
             >
-              Logout
+              Cerrar Sesión
             </button>
           </div>
         </nav>
