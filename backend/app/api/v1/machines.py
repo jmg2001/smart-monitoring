@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.models.machine import Machine
 from app.models.user import User
@@ -20,6 +20,9 @@ def machines_overview(
             db.query(Machine).filter(Machine.company_id == currentUser.company_id).all()
         )
     else:
+        return
+
+    if len(machines) < 0:
         return
 
     overview = []
@@ -93,6 +96,10 @@ def get_machine(
     db: Session = Depends(get_db),
     currentUser: User = Depends(get_current_user),
 ):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Forbidden request.",
+    )
     if currentUser.role != "super_admin":
         machine = (
             db.query(Machine)
@@ -100,6 +107,10 @@ def get_machine(
             .filter(Machine.id == machine_id)
             .first()
         )
+
+        if machine == None:
+            raise credentials_exception
+
     else:
         machine = db.query(Machine).filter(Machine.id == machine_id).first()
 

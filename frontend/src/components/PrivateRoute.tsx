@@ -19,11 +19,10 @@ export default function PrivateRoute({ children, roles }: Props) {
     const decoded = jwtDecode<TokenPayload>(token);
 
     if (!roles.includes(decoded.role)) {
-      // 🔥 AQUÍ está lo que te falta
       return decoded.role === "super_admin" ? (
         <Navigate to="/admin" replace />
       ) : (
-        <Navigate to="/" replace />
+        <Navigate to="/client" replace />
       );
     }
   }

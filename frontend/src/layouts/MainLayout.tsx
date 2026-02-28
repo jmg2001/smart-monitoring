@@ -17,7 +17,8 @@ export default function MainLayout() {
 
         <nav className="space-y-4 text-sm">
           <NavLink
-            to="/"
+            to="/client"
+            end
             className={({ isActive }) =>
               `block px-3 py-2 rounded-md transition ${
                 isActive
@@ -30,7 +31,7 @@ export default function MainLayout() {
           </NavLink>
 
           <NavLink
-            to="/machines"
+            to="/client/machines"
             className={({ isActive }) =>
               `block px-3 py-2 rounded-md transition ${
                 isActive

@@ -22,7 +22,7 @@ export function AuthProvider({ children }: Props) {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   useEffect(() => {

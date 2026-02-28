@@ -10,24 +10,27 @@ import AdminOverview from "./pages/admin/AdminOverview";
 import CompaniesPage from "./pages/admin/CompaniesPage";
 import CompanyDetailPage from "./pages/admin/CompanyDetailPage";
 import AdminMachineDetail from "./pages/admin/AdminMachineDetail";
+import Landing from "./pages/Landing";
 
 function App() {
   return (
     <Routes>
       {/* PUBLIC ROUTE */}
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
 
       {/* CLIENT AREA*/}
       <Route
+        path="/client"
         element={
           <PrivateRoute roles={["admin", "operator"]}>
             <MainLayout />
           </PrivateRoute>
         }
       >
-        <Route path="/" element={<Overview />} />
-        <Route path="/machine/:id" element={<MachineDetail />} />
-        <Route path="/machines" element={<MachinesPage />} />
+        <Route index element={<Overview />} />
+        <Route path="machines/:id" element={<MachineDetail />} />
+        <Route path="machines" element={<MachinesPage />} />
       </Route>
 
       {/* ADMIN AREA */}
@@ -40,10 +43,10 @@ function App() {
         }
       >
         <Route index element={<AdminOverview />} />
-        <Route path="companies/" element={<CompaniesPage />} />
-        <Route path="companies/:companyId/" element={<CompanyDetailPage />} />
+        <Route path="companies" element={<CompaniesPage />} />
+        <Route path="companies/:companyId" element={<CompanyDetailPage />} />
         <Route
-          path="companies/:companyId/machine/:machineId/"
+          path="companies/:companyId/machine/:machineId"
           element={<AdminMachineDetail />}
         />
       </Route>

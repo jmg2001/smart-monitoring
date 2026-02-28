@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from app.schemas.production import ProductionCreate
 from app.models.production_record import ProductionRecord
-from app.api.deps import get_db, validate_api_key
+from app.models.user import User
+from app.api.deps import get_db, validate_api_key, get_current_user
 from uuid import UUID
 
 router = APIRouter()
@@ -26,7 +27,7 @@ Recomendado enviar timestamp en UTC.
 """,
     response_description="Registro guardado correctamente",
 )
-def create_production(
+def record_production(
     data: ProductionCreate,
     machine=Depends(validate_api_key),
     db: Session = Depends(get_db),
@@ -51,10 +52,12 @@ def get_production_range(
     start: datetime = Query(...),
     end: datetime = Query(...),
     db: Session = Depends(get_db),
+    currentUser: User = Depends(get_current_user),
 ):
     records = (
         db.query(ProductionRecord)
         .filter(
+            ProductionRecord.company_id == currentUser.company_id,
             ProductionRecord.machine_id == machine_id,
             ProductionRecord.timestamp >= start,
             ProductionRecord.timestamp <= end,
@@ -72,10 +75,12 @@ def machine_summary(
     start: datetime = Query(...),
     end: datetime = Query(...),
     db: Session = Depends(get_db),
+    currentUser: User = Depends(get_current_user),
 ):
     records = (
         db.query(ProductionRecord)
         .filter(
+            ProductionRecord.company_id == currentUser.company_id,
             ProductionRecord.machine_id == machine_id,
             ProductionRecord.timestamp >= start,
             ProductionRecord.timestamp <= end,
@@ -136,10 +141,12 @@ def machine_summary(
         "records_analyzed": len(records),
     }
 
+
 @router.get("/machines/{machine_id}/daily")
 def machine_daily_summary(
     machine_id: UUID,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    currentUser: User = Depends(get_current_user),
 ):
     now = datetime.utcnow()
     start = datetime(now.year, now.month, now.day)
@@ -148,9 +155,10 @@ def machine_daily_summary(
     records = (
         db.query(ProductionRecord)
         .filter(
+            ProductionRecord.company_id == currentUser.company_id,
             ProductionRecord.machine_id == machine_id,
             ProductionRecord.timestamp >= start,
-            ProductionRecord.timestamp <= end
+            ProductionRecord.timestamp <= end,
         )
         .order_by(ProductionRecord.timestamp)
         .all()
@@ -162,7 +170,7 @@ def machine_daily_summary(
             "total_production": 0,
             "run_time_minutes": 0,
             "stop_time_minutes": 0,
-            "availability_percent": 0
+            "availability_percent": 0,
         }
 
     total_production = 0
@@ -176,17 +184,13 @@ def machine_daily_summary(
 
         # ---- Producción (con reset)
         if current.count_value >= previous.count_value:
-            total_production += (
-                current.count_value - previous.count_value
-            )
+            total_production += current.count_value - previous.count_value
         else:
             total_production += current.count_value
             resets += 1
 
         # ---- Tiempo por estado
-        delta_seconds = (
-            current.timestamp - previous.timestamp
-        ).total_seconds()
+        delta_seconds = (current.timestamp - previous.timestamp).total_seconds()
 
         if previous.status == "RUN":
             run_seconds += delta_seconds
@@ -197,11 +201,7 @@ def machine_daily_summary(
 
     total_seconds = run_seconds + stop_seconds
 
-    availability = (
-        (run_seconds / total_seconds) * 100
-        if total_seconds > 0
-        else 0
-    )
+    availability = (run_seconds / total_seconds) * 100 if total_seconds > 0 else 0
 
     return {
         "date": start.date(),
@@ -209,7 +209,7 @@ def machine_daily_summary(
         "run_time_minutes": round(run_seconds / 60, 2),
         "stop_time_minutes": round(stop_seconds / 60, 2),
         "availability_percent": round(availability, 2),
-        "reset_events": resets
+        "reset_events": resets,
     }
 
 
@@ -242,11 +242,10 @@ def machine_realtime_status(machine_id: UUID, db: Session = Depends(get_db)):
         "seconds_since_last_update": int(seconds_since_last),
     }
 
+
 @router.get("/machines/{machine_id}/last-hours")
 def machine_last_hours(
-    machine_id: UUID,
-    hours: int = Query(2, ge=1, le=24),
-    db: Session = Depends(get_db)
+    machine_id: UUID, hours: int = Query(2, ge=1, le=24), db: Session = Depends(get_db)
 ):
     end = datetime.utcnow()
     start = end - timedelta(hours=hours)
@@ -256,16 +255,10 @@ def machine_last_hours(
         .filter(
             ProductionRecord.machine_id == machine_id,
             ProductionRecord.timestamp >= start,
-            ProductionRecord.timestamp <= end
+            ProductionRecord.timestamp <= end,
         )
         .order_by(ProductionRecord.timestamp)
         .all()
     )
 
-    return [
-        {
-            "timestamp": r.timestamp,
-            "count_value": r.count_value
-        }
-        for r in records
-    ]
+    return [{"timestamp": r.timestamp, "count_value": r.count_value} for r in records]

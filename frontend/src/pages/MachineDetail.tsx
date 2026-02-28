@@ -50,7 +50,7 @@ export default function MachineDetail() {
       <div className="justify-between flex">
         <div className="flex items-center gap-3 mb-6">
           <button
-            onClick={() => navigate("/machines/")}
+            onClick={() => navigate("/client/machines")}
             className="cursor-pointer p-2 items-center bg-[#1e293b] border border-gray-700 rounded-lg  hover:border-cyan-500 transition"
           >
             ← Volver

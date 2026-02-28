@@ -3,7 +3,6 @@ from typing import Annotated
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt, ExpiredSignatureError
-from datetime import datetime, timezone, timedelta
 
 from app.db.session import SessionLocal
 from app.models.machine import Machine

@@ -9,7 +9,6 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchMachines = async () => {
       const response = await api.get("/machines/overview");
-      console.log(response);
       setMachines(response.data);
     };
 
@@ -22,7 +21,7 @@ export default function Dashboard() {
 
   return (
     <div className="text-white">
-      <h2 className="text-2xl font-semibold mb-4">Machines</h2>
+      <h2 className="text-2xl font-semibold mb-4">Máquinas</h2>
       <MachineSelector machines={machines} />
     </div>
   );

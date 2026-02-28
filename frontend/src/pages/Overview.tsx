@@ -3,7 +3,7 @@ import { api } from "../api/axios";
 import KPI from "../components/KPI";
 import type { ServerStatistics } from "../types";
 
-export default function AdminHome() {
+export default function Overview() {
   const [stats, setStats] = useState<ServerStatistics | null>(null);
 
   useEffect(() => {

@@ -14,7 +14,7 @@ export default function MachineSelector({ machines }: Props) {
       {machines.map((machine: MachineOverview) => (
         <MachineCard
           machine={machine}
-          onClick={() => navigate(`/machine/${machine.id}`)}
+          onClick={() => navigate(`${machine.id}`)}
           key={machine.id}
         ></MachineCard>
       ))}

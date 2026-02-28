@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import type { ServerStatistics, ServerStatus } from "../../types";
 
-export default function AdminHome() {
+export default function AdminOverview() {
   const [stats, setStats] = useState<ServerStatistics | null>(null);
   const [serverHistory, setServerHistory] = useState<ServerStatus[]>([]);
   const [currCPU, setCurrCPU] = useState<number>(0);
